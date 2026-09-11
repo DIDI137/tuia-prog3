@@ -3,6 +3,19 @@ from ..models.frontier import QueueFrontier
 from ..models.solution import NoSolution, Solution
 from ..models.node import Node
 
+class Cola:
+    def __init__(self) -> None:
+        self.items = []        
+    
+    def encolar(self,x):
+        self.items.append(x)
+
+    def pop(self):
+        self.items.remove(0)
+
+    def vacia(self):
+        if len(self.items) == 0:
+            return True
 
 class BreadthFirstSearch:
     @staticmethod
@@ -22,7 +35,17 @@ class BreadthFirstSearch:
         reached = {}
         reached[root.state] = True
 
-        # Initialize frontier with the root node
+        if grid.objective_test(root.state):
+            return Solution(root, reached)
+        
+        alcanzados = root.state
+        frontera = Cola()  
+        frontera.encolar(root)
+        if frontera.vacia():
+            return NoSolution(reached, 0)
+        
+        
+        # Initialize frontier with te root node
         # TODO Complete the rest!!
         # ...
 
