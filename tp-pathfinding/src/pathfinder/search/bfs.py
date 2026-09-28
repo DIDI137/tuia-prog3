@@ -11,11 +11,13 @@ class Cola:
         self.items.append(x)
 
     def pop(self):
-        self.items.remove(0)
+        return self.items.pop(0)
 
     def vacia(self):
         if len(self.items) == 0:
             return True
+        else:
+            return False
 
 class BreadthFirstSearch:
     @staticmethod
@@ -29,7 +31,11 @@ class BreadthFirstSearch:
             Solution: Solution found
         """
         # Initialize root node
-        root = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        root = Node("",
+                    state=grid.initial,
+                    cost=0, 
+                    parent=None, 
+                    action=None)
 
         # Initialize reached with the initial state
         reached = {}
@@ -38,15 +44,34 @@ class BreadthFirstSearch:
         if grid.objective_test(root.state):
             return Solution(root, reached)
         
-        alcanzados = root.state
+        
         frontera = Cola()  
         frontera.encolar(root)
-        if frontera.vacia():
-            return NoSolution(reached, 0)
         
-        
-        # Initialize frontier with te root node
-        # TODO Complete the rest!!
-        # ...
-
+        while not frontera.vacia():
+            
+            node = frontera.pop()
+            
+            for accion in grid.actions(node.state):
+                sucesor = grid.result(node.state, accion)
+                
+                if sucesor not in reached:
+                    son = Node(
+                        "",
+                        state=sucesor,
+                        cost=node.cost + grid.individual_cost(
+                            node.state, accion
+                        ),
+                        parent= node,
+                        action=accion
+                    )
+                    
+                    reached[sucesor] = True
+                    
+                    if grid.objective_test(sucesor):
+                        return Solution(son, reached)
+                    
+                    frontera.encolar(son)
         return NoSolution(reached)
+    
+        
