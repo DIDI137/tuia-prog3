@@ -3,22 +3,6 @@ from ..models.frontier import QueueFrontier
 from ..models.solution import NoSolution, Solution
 from ..models.node import Node
 
-class Cola:
-    def __init__(self) -> None:
-        self.items = []        
-    
-    def encolar(self,x):
-        self.items.append(x)
-
-    def pop(self):
-        return self.items.pop(0)
-
-    def vacia(self):
-        if len(self.items) == 0:
-            return True
-        else:
-            return False
-
 class BreadthFirstSearch:
     @staticmethod
     def search(grid: Grid) -> Solution:
@@ -45,24 +29,24 @@ class BreadthFirstSearch:
             return Solution(root, reached)
         
         
-        frontera = Cola()  
-        frontera.encolar(root)
+        frontera = QueueFrontier()  
+        frontera.add(root)
         
-        while not frontera.vacia():
+        while not frontera.is_empty():
             
-            node = frontera.pop()
+            nodo = frontera.remove()
             
-            for accion in grid.actions(node.state):
-                sucesor = grid.result(node.state, accion)
+            for accion in grid.actions(nodo.state):
+                sucesor = grid.result(nodo.state, accion)
                 
                 if sucesor not in reached:
                     son = Node(
                         "",
                         state=sucesor,
-                        cost=node.cost + grid.individual_cost(
-                            node.state, accion
+                        cost=nodo.cost + grid.individual_cost(
+                            nodo.state, accion
                         ),
-                        parent= node,
+                        parent= nodo,
                         action=accion
                     )
                     
@@ -71,7 +55,8 @@ class BreadthFirstSearch:
                     if grid.objective_test(sucesor):
                         return Solution(son, reached)
                     
-                    frontera.encolar(son)
+                    frontera.add(son)
+                    
         return NoSolution(reached)
     
         
