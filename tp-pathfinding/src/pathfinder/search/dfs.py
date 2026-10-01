@@ -2,22 +2,6 @@ from ..models.grid import Grid
 from ..models.frontier import StackFrontier
 from ..models.solution import NoSolution, Solution
 from ..models.node import Node
-
-class Pila:
-    def __init__(self):
-        self.items = []
-    
-    def apilar(self,dato):
-        self.items.append(dato)
-        
-    def desapilar(self):
-        return self.items.pop()
-        
-    def esta_vacia(self):
-        if len(self.items) == 0:
-            return True
-        else:
-            return False
         
 class DepthFirstSearch:
     @staticmethod
@@ -40,11 +24,11 @@ class DepthFirstSearch:
         # Initialize expanded with the empty dictionary
         expanded = dict()
 
-        frontera = Pila()
-        frontera.apilar(root)
+        frontera = StackFrontier()
+        frontera.add(root)
         
-        while not frontera.esta_vacia():
-            nodo = frontera.desapilar()
+        while not frontera.is_empty():
+            nodo = frontera.remove()
             
             if nodo.state in expanded:
                 continue
@@ -69,7 +53,7 @@ class DepthFirstSearch:
                         action=accion
                     )
 
-                    frontera.apilar(son)                      
+                    frontera.add(son)                      
         
 
         return NoSolution(expanded)
