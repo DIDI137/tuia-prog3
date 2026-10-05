@@ -16,14 +16,35 @@ class UniformCostSearch:
             Solution: Solution found
         """
         # Initialize root node
-        root = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        root = Node("", 
+                    state=grid.initial,
+                    cost = 0,
+                    parent = None,
+                    action = None)
 
         # Initialize reached with the initial state
         reached = {}
         reached[root.state] = root.cost
 
+ 
         # Initialize frontier with the root node
+        frontera = PriorityQueueFrontier()
+        frontera.add(root, root.cost)
+
         # TODO Complete the rest!!
-        # ...
+        while True:
+            if frontera.is_empty():
+                return NoSolution(reached)
+            n = frontera.pop()
+            if grid.objective_test(n.state):
+                return Solution(n, reached)
+            for a in grid.actions(n.state):
+                s = grid.result(n.state, a)
+                c = n.cost + grid.individual_cost(n.state, a)
+
+                if s not in reached or c < reached[s]:
+                    np = Node("", state= s, cost = c, parent = n, action = a)
+                    reached[s] = c
+                    frontera.add(np, c)
 
         return NoSolution(reached)
