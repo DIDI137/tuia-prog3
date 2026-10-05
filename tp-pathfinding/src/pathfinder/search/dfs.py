@@ -19,7 +19,7 @@ class DepthFirstSearch:
                     state=grid.initial, 
                     cost=0, 
                     parent=None, 
-                       action=None)
+                    action=None)
 
         # Initialize expanded with the empty dictionary
         expanded = dict()
@@ -27,13 +27,13 @@ class DepthFirstSearch:
         if grid.objective_test(root.state):
             return Solution(root, expanded) 
         
-        frontera = StackFrontier()
-        frontera.add(root)
+        frontier = StackFrontier()
+        frontier.add(root)
         
         while True:
-            if frontera.is_empty():
+            if frontier.is_empty():
                 return NoSolution(expanded)
-            nodo = frontera.remove()
+            nodo = frontier.remove()
             
             if nodo.state in expanded:
                 continue
@@ -58,6 +58,6 @@ class DepthFirstSearch:
                     if grid.objective_test(nodo.state):
                         return Solution(son, expanded) 
                     
-                    frontera.add(son)                      
+                    frontier.add(son)                      
         
         return NoSolution(expanded)

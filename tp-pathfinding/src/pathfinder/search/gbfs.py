@@ -19,27 +19,26 @@ class GreedyBestFirstSearch:
                     state=grid.initial,
                     cost=0,
                     parent=None,
-                    action=None)
+                    action=None
+                    )
 
         # Initialize reached with the initial state
         reached = {}
         reached[root.state] = root.cost
         
         frontera = PriorityQueueFrontier()
-        
-        fila, columna = root.state
-        fila_objetivo, columna_objetivo = grid.end
-        
-        heuristica = abs(fila - fila_objetivo) + abs(columna - columna_objetivo)
-        
-        frontera.add(root, heuristica)
-        while not frontera.is_empty():
-     
+
+        root.estimated_distance = grid.h(root)
+        frontera.add(root, root.estimated_distance)
+
+        while True:
+            if frontera.is_empty():
+                return NoSolution(reached)
+            
             nodo = frontera.pop()
 
             if nodo.state == grid.end:
                 return Solution(nodo, reached)
-
    
             for accion in grid.actions(nodo.state):
                 state = grid.result(nodo.state, accion)
@@ -57,13 +56,7 @@ class GreedyBestFirstSearch:
                     )
 
                     reached[state] = cost
-  
-                    fila, columna = state
-                    fila_objetivo, columna_objetivo = grid.end
-
-                    heuristica = abs(fila - fila_objetivo) + abs(columna - columna_objetivo)
-
-                    frontera.add(son, heuristica)
+                    son.estimated_distance = grid.h(son)
+                    frontera.add(son, root.estimated_distance)
         
-
         return NoSolution(reached)
