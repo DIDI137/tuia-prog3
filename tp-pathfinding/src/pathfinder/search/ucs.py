@@ -35,16 +35,16 @@ class UniformCostSearch:
         while True:
             if frontera.is_empty():
                 return NoSolution(reached)
-            n = frontera.pop()
-            if grid.objective_test(n.state):
-                return Solution(n, reached)
-            for a in grid.actions(n.state):
-                s = grid.result(n.state, a)
-                c = n.cost + grid.individual_cost(n.state, a)
+            nodo = frontera.pop()
+            if grid.objective_test(nodo.state):
+                return Solution(nodo, reached)
+            for a in grid.actions(nodo.state):
+                estadoResult = grid.result(nodo.state, a)
+                costoResult = nodo.cost + grid.individual_cost(nodo.state, a)
 
-                if s not in reached or c < reached[s]:
-                    np = Node("", state= s, cost = c, parent = n, action = a)
-                    reached[s] = c
-                    frontera.add(np, c)
+                if estadoResult not in reached or costoResult < reached[estadoResult]:
+                    nodop = Node("", state= estadoResult, cost = costoResult, parent = nodo, action = a)
+                    reached[estadoResult] = costoResult
+                    frontera.add(nodop, costoResult)
 
         return NoSolution(reached)
