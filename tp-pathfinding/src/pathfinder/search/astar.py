@@ -53,4 +53,4 @@ class AStarSearch:
                     reached[estadoResult] = costoResult
                     frontera.add(son, son.cost + grid.h(son))
 
-        return NoSolution(reached)
+

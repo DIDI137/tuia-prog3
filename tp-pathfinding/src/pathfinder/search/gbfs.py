@@ -57,6 +57,5 @@ class GreedyBestFirstSearch:
 
                     reached[state] = cost
                     son.estimated_distance = grid.h(son)
-                    frontera.add(son, root.estimated_distance)
+                    frontera.add(son, son.estimated_distance)
         
-        return NoSolution(reached)
