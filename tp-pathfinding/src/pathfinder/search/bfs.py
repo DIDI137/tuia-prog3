@@ -29,25 +29,25 @@ class BreadthFirstSearch:
             return Solution(root, reached)
         
         
-        frontera = QueueFrontier()  
-        frontera.add(root)
+        frontier = QueueFrontier()  
+        frontier.add(root)
         
-        while not frontera.is_empty():
+        while not frontier.is_empty():
             
-            nodo = frontera.remove()
+            nodo = frontier.remove()
             
-            for accion in grid.actions(nodo.state):
-                sucesor = grid.result(nodo.state, accion)
+            for action in grid.actions(nodo.state):
+                sucesor = grid.result(nodo.state, action)
                 
                 if sucesor not in reached:
                     son = Node(
                         "",
                         state=sucesor,
                         cost=nodo.cost + grid.individual_cost(
-                            nodo.state, accion
+                            nodo.state, action
                         ),
                         parent= nodo,
-                        action=accion
+                        action=action
                     )
                     
                     reached[sucesor] = True
@@ -55,7 +55,7 @@ class BreadthFirstSearch:
                     if grid.objective_test(sucesor):
                         return Solution(son, reached)
                     
-                    frontera.add(son)
+                    frontier.add(son)
                     
         return NoSolution(reached)
     
