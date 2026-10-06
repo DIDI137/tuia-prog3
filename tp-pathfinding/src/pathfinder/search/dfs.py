@@ -30,9 +30,8 @@ class DepthFirstSearch:
         frontier = StackFrontier()
         frontier.add(root)
         
-        while True:
-            if frontier.is_empty():
-                return NoSolution(expanded)
+        while not frontier.is_empty():
+                
             nodo = frontier.remove()
             
             if nodo.state in expanded:
@@ -55,7 +54,7 @@ class DepthFirstSearch:
                         action=accion
                     )
 
-                    if grid.objective_test(nodo.state):
+                    if grid.objective_test(sucesor):
                         return Solution(son, expanded) 
                     
                     frontier.add(son)                      
